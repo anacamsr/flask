@@ -35,23 +35,35 @@ def store():
         db.session.add(new_task)
         db.session.commit()
         return redirect(url_for('index'))
-    return render_template('form.html', form=form)
+    return render_template('form.html', form=form, modo='create')
 
 @app.route('/create', methods=['GET', 'POST'])
 def create():
     return redirect(url_for('store'))
 
-@app.route('/edit/<int:task_id>')
+@app.route('/edit/<int:task_id>', methods=['GET', 'POST'])
 def edit(task_id):
     task = Task.query.get(task_id)
-    return render_template('edit.html', task=task, task_id=task_id)
+    form = Form(obj=task)
+
+    if request.method == 'POST' and form.validate_on_submit():
+        task.nome = form.nome.data
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('form.html', task=task, task_id=task_id, form=form, modo='edit')
 
 @app.route('/update/<int:task_id>', methods=['POST'])
 def update(task_id):
     task = Task.query.get(task_id)
-    task.nome = request.form.get('nome')  # Ajuste para 'nome' em vez de 'task'
-    db.session.commit()
-    return redirect(url_for('index'))
+    
+    form = Form(request.form)
+    if form.validate():
+        task.nome = form.nome.data
+        db.session.commit()
+        return redirect(url_for('index'))
+    else:
+        return render_template('form.html', task=task, task_id=task_id, form=form, modo='edit')
+
 
 @app.route('/delete/<int:task_id>')
 def delete(task_id):

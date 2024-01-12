@@ -14,19 +14,27 @@
 
   <body>
     <div class="col-8 m-auto pt-2 pb-2 text-center">
+      {% if modo == 'create' %}
       <h1>Cadastro</h1>
+      {% elif modo == 'edit' %}
+      <h1>Edição</h1>
+      {% endif %}
     </div>
     <div class="col-8 m-auto pt-2 pb-2 text-center">
-      <a href="/" class="btn btn-info">Voltar</a>
+      <a href="/" class="btn btn-dark">Voltar</a>
     </div>
-    <div class="col-8 m-auto pt-2 pb-2 text-center">
-      <form method="post" action="{{ url_for('store') }}" id="form">
+    <div class="col-4 m-auto pt-2 pb-2 text-left">
+      <form
+        method="post"
+        action="{% if modo == 'edit' %}{{ url_for('update', task_id=task_id) }}{% else %}{{ url_for('store') }}{% endif %}"
+        id="form"
+      >
         {{ form.hidden_tag() }}
         <div class="form-group mt-4">
           <label for="nome">Nome</label>
           {{ form.nome(class="form-control", placeholder="Digite o nome") }}
         </div>
-        {{ form.salvar(class="btn btn-success") }}
+        {{ form.salvar(class="btn btn-success mt-4") }}
       </form>
     </div>
   </body>

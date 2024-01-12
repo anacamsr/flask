@@ -31,7 +31,7 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ task.nome }}</td>
                     <td>
-                        <a href="{{ url_for('edit', task_id=task.id) }}" class="btn btn-info btn-sm">Editar</a>
+                        <a href="{{ url_for('edit', task_id=task.id) }}" class="btn btn-secondary btn-sm">Editar</a>
                         <a href="{{ url_for('delete', task_id=task.id) }}" class="btn btn-danger btn-sm">Excluir</a>
                     </td>
                 </tr>
