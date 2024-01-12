@@ -26,18 +26,20 @@ def index():
     tasks = Task.query.all()
     return render_template('index.html', tasks=tasks)
 
-@app.route('/form')
+@app.route('/form', methods=['GET', 'POST'])
 def store():
     form = Form()
+    if request.method == 'POST' and form.validate_on_submit():
+        nome = form.nome.data
+        new_task = Task(nome=nome)
+        db.session.add(new_task)
+        db.session.commit()
+        return redirect(url_for('index'))
     return render_template('form.html', form=form)
 
 @app.route('/create', methods=['GET', 'POST'])
 def create():
-    nome = request.form.get('nome')  
-    new_task = Task(nome=nome) 
-    db.session.add(new_task)
-    db.session.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('store'))
 
 @app.route('/edit/<int:task_id>')
 def edit(task_id):
