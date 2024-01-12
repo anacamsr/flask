@@ -20,17 +20,13 @@
       <a href="/" class="btn btn-info">Voltar</a>
     </div>
     <div class="col-8 m-auto pt-2 pb-2 text-center">
-      <form
-        method="post"
-        action="{% if dados %}/update/{{ dados.id }}/{% else %}/create/{% endif %}"
-        id="form"
-      >
+      <form method="post" action="{{ url_for('store') }}" id="form">
         {{ form.hidden_tag() }}
         <div class="form-group mt-4">
           <label for="nome">Nome</label>
           {{ form.nome(class="form-control", placeholder="Digite o nome") }}
         </div>
-        <input type="submit" class="btn btn-success" value="Salvar" />
+        {{ form.salvar(class="btn btn-success") }}
       </form>
     </div>
   </body>
